@@ -1,0 +1,8 @@
+{
+  "name": "TSchemaAS",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "typescript": "^7.0.2"
+  }
+}
