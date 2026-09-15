@@ -25,8 +25,20 @@ const user2 = {
 }
 console.log(schema.tryParse(user2));
 
-// not typeof object
-const n = 10;
+const arraySchema = s.array(s.string());
 
-console.log(schema.tryParse(n));
+// valid array of strings
+const names = ["youssef", "badr", "adam"];
 
+console.log(arraySchema.parse(names));
+console.log(arraySchema.tryParse(names));
+
+// invalid array (contains a number)
+const names1 = ["youssef", 10, "messi"];
+
+console.log(arraySchema.tryParse(names1));
+
+// invalid format (not an array)
+const names2 = "youssef";
+
+console.log(arraySchema.tryParse(names2));
