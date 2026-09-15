@@ -1,12 +1,28 @@
-import type {Schema} from "./schema";
+import  {Schema} from "./schema.js";
+import type {SafeParseResult} from "../types";
 
-export class NumberSchema implements Schema<number> {
+export class NumberSchema extends Schema<number> {
 
     public parse(value : unknown) : number {
         if(typeof value !== "number"){
             throw new Error("Expected a number");
         }
         return value;
+    }
+
+    public tryParse(value: unknown): SafeParseResult<number> {
+
+        if(typeof value !== "number"){
+            return {
+                success : false,
+                error : new Error("Expected a number")
+            }
+        }
+        return {
+            success : true,
+            data : value
+        };
+        
     }
 }
 
