@@ -8,13 +8,16 @@ export class ArraySchema<T extends Schema<any>> extends Schema<InferSchemaType<T
         super();
         this._schema = s;
     }
-    private checkArray(arr : unknown){
+    private checkArray(arr : unknown) : arr is any[]{
         if(!Array.isArray(arr)){
-            throw new Error("the type is incomplatible");
+            return false;
         }
+        return true;
     }
     public parse(arr : unknown): InferSchemaType<T> {
-       this.checkArray(arr); 
+        if(!this.checkArray(arr)){
+            throw new Error("The type is incompatible with any[]");
+        }
        const list = arr as any[];
        for(let el of list){
             try{
@@ -29,7 +32,12 @@ export class ArraySchema<T extends Schema<any>> extends Schema<InferSchemaType<T
        return list as InferSchemaType<T>; 
     }
     public tryParse(arr : unknown): SafeParseResult<InferSchemaType<T>> {
-       this.checkArray(arr); 
+        if(!this.checkArray(arr)){
+            return {
+                success : false,
+                error : new Error("The type is incompatible with any[]")
+            }
+        }
        const list = arr as any[];
        for(let el of list){
             const result = this._schema.tryParse(el);

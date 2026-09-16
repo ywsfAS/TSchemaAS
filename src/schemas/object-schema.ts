@@ -8,14 +8,17 @@ export class ObjectSchema<S extends SchemaObjectShape> extends Schema<InferObjec
         super();
         this._object = obj;
     }
-    private checkObj(obj : unknown) : void {
+    private checkObj(obj : unknown) : obj is Object {
         if(typeof obj !== "object" || obj === null){
-            throw new Error("the type is incomplatible");
+            return false;
         }
+        return true;
     }
 
     parse(obj: unknown): InferObjectSchemaType<S> {
-        this.checkObj(obj);
+        if(!this.checkObj(obj)){
+            throw new Error("The type is incompatible with Object");
+        }
         const record = obj as Record<string,any>;
         for(const [k ,s] of Object.entries(this._object)){
             if(!Object.hasOwn(record,k)){
@@ -32,7 +35,12 @@ export class ObjectSchema<S extends SchemaObjectShape> extends Schema<InferObjec
     }
 
     tryParse(obj: unknown): SafeParseResult<InferObjectSchemaType<S>> {
-        this.checkObj(obj);
+        if(!this.checkObj(obj)){
+            return {
+                success : false,
+                error : new Error(`The type is incompatible with Object`)
+            }
+        }
         const record = obj as Record<string,any>;
         for(const [k ,s] of Object.entries(this._object)){
             if(!Object.hasOwn(record,k)){
