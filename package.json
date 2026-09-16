@@ -4,5 +4,8 @@
   "type": "module",
   "dependencies": {
     "typescript": "^7.0.2"
+  },
+  "devDependencies": {
+    "vitest": "^5.0.1"
   }
 }
