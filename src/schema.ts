@@ -6,6 +6,7 @@ import { ArraySchema } from "./schemas/array-schema.js";
 import type { SchemaObjectShape , inferType} from "./types.js";
 import type { Schema } from "./schemas/schema.js";
 import { Optional } from "./modifiers/optional.js";
+import { Nullable } from "./modifiers/nullable.js";
 
 
 export const s = {
