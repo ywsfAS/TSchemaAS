@@ -12,6 +12,7 @@ import { MinRefinement } from "./refinements/min.js";
 import { MaxRefinement } from "./refinements/max.js";
 import { Regex } from "./refinements/regex.js";
 import { Email } from "./refinements/email.js";
+import {Url} from "./refinements/url.js";
 
 
 export const s = {
