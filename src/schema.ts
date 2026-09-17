@@ -8,9 +8,10 @@ import type { Schema } from "./schemas/schema.js";
 import { Optional } from "./modifiers/optional.js";
 import { Nullable } from "./modifiers/nullable.js";
 import { Default } from "./modifiers/default.js";
-import { MinRefinement } from "./refinements/Min.js";
-import { MaxRefinement } from "./refinements/Max.js";
+import { MinRefinement } from "./refinements/min.js";
+import { MaxRefinement } from "./refinements/max.js";
 import { Regex } from "./refinements/regex.js";
+import { Email } from "./refinements/email.js";
 
 
 export const s = {

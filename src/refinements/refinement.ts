@@ -1,7 +1,7 @@
 
 export abstract class Refinement<T> {
     private _message : string;
-    abstract check(value : T , ...options : any[]) : boolean;
+    abstract check(value : T) : boolean;
 
     constructor(msg : string){
         this._message = msg;
