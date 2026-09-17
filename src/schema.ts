@@ -3,8 +3,9 @@ import {NumberSchema} from "./schemas/number-schema.js";
 import {BooleanSchema} from "./schemas/boolean-schema.js";
 import {ObjectSchema} from "./schemas/object-schema.js";
 import { ArraySchema } from "./schemas/array-schema.js";
-import type { SchemaObjectShape , InferSchemaType, InferObjectSchemaType} from "./types.js";
+import type { SchemaObjectShape , inferType} from "./types.js";
 import type { Schema } from "./schemas/schema.js";
+import { Optional } from "./modifiers/optional.js";
 
 
 export const s = {
@@ -25,10 +26,5 @@ export const s = {
     },
 }
 export namespace s {
-    export type infer<T> = 
-        T extends SchemaObjectShape 
-            ? InferObjectSchemaType<T> 
-            : T extends Schema<any> 
-                ? InferSchemaType<T>
-                : never;
+    export type infer<T> = inferType<T>;
 }

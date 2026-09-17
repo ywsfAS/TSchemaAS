@@ -6,3 +6,9 @@ export type InferSchemaType<T extends Schema<any>> = T extends Schema<infer S> ?
 export type InferObjectSchemaType<S extends SchemaObjectShape> = {
     [k in keyof S] : InferSchemaType<S[k]>
 };
+export type inferType<T> = 
+    T extends SchemaObjectShape 
+        ? InferObjectSchemaType<T> 
+        : T extends Schema<any> 
+            ? InferSchemaType<T>
+            : never;
