@@ -1,9 +1,9 @@
 import type { InferSchemaType, SafeParseResult } from "../types";
 import { Schema } from "./schema.js";
 
-export class ArraySchema<T extends Schema<any>> extends Schema<InferSchemaType<T>> {
+export class ArraySchema<T extends Schema<any>> extends Schema<InferSchemaType<T>[]> {
 
-    private readonly _schema : Schema<T>;
+    private readonly _schema : T;
     constructor(s : T){
         super();
         this._schema = s;
@@ -14,7 +14,7 @@ export class ArraySchema<T extends Schema<any>> extends Schema<InferSchemaType<T
         }
         return true;
     }
-    public parse(arr : unknown): InferSchemaType<T> {
+    public parse(arr : unknown): InferSchemaType<T>[] {
         if(!this.checkArray(arr)){
             throw new Error("The type is incompatible with any[]");
         }
@@ -29,9 +29,9 @@ export class ArraySchema<T extends Schema<any>> extends Schema<InferSchemaType<T
                 });
             }
        }
-       return list as InferSchemaType<T>; 
+       return list as InferSchemaType<T>[]; 
     }
-    public tryParse(arr : unknown): SafeParseResult<InferSchemaType<T>> {
+    public tryParse(arr : unknown): SafeParseResult<InferSchemaType<T>[]> {
         if(!this.checkArray(arr)){
             return {
                 success : false,
@@ -50,7 +50,7 @@ export class ArraySchema<T extends Schema<any>> extends Schema<InferSchemaType<T
         }
        return {
            success : true,
-           data : list as InferSchemaType<T>
+           data : list as InferSchemaType<T>[]
        }; 
         
     }
