@@ -14,6 +14,7 @@ import { Regex } from "./refinements/regex.js";
 import { Email } from "./refinements/email.js";
 import {Url} from "./refinements/url.js";
 import { Negative , Positive } from "./refinements/positive-negative.js";
+import { Refine } from "./refinements/refine.js";
 
 
 export const s = {
