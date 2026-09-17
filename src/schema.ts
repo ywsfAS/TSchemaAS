@@ -13,6 +13,7 @@ import { MaxRefinement } from "./refinements/max.js";
 import { Regex } from "./refinements/regex.js";
 import { Email } from "./refinements/email.js";
 import {Url} from "./refinements/url.js";
+import { Negative , Positive } from "./refinements/positive-negative.js";
 
 
 export const s = {
