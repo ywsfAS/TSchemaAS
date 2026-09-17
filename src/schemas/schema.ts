@@ -1,30 +1,53 @@
 import type { Refinement } from "../refinements/refinement";
-import type {SafeParseResult} from "../types";
-export abstract class Schema<T> {
-    // init refinements
-    protected readonly _refinements : Refinement<T>[] = [];
-    // Parse the value and throw if validation fails.
-    abstract _parse(value : unknown) : T;
-    // Parse the value without throwing; return the validation result instead.
-    abstract _tryParse(value : unknown) : SafeParseResult<T>
+import type { SafeParseResult } from "../types";
 
-    protected runRefinements(value : T){
-        for(let ref of this._refinements){
-            if(!ref.check(value)){
-                // error message from that refinement
+export abstract class Schema<T> {
+    protected readonly _refinements: Refinement<T>[] = [];
+
+    abstract _parse(value: unknown): T;
+
+    abstract _tryParse(value: unknown): SafeParseResult<T>;
+
+    protected runRefinements(value: T): void {
+        for (const ref of this._refinements) {
+            if (!ref.check(value)) {
                 throw new Error(ref.message);
             }
         }
     }
-    public parse(value : unknown) : T {
-        const result = this._parse(value);
-        this.runRefinements(value as T);
-        return result;
 
+    protected tryRunRefinements(value: T): SafeParseResult<T> | void {
+        for (const ref of this._refinements) {
+            if (!ref.check(value)) {
+                return {
+                    success: false,
+                    error: new Error(ref.message)
+                };
+            }
+        }
     }
-    public tryParse(value : unknown) : SafeParseResult<T>{
-        const result = this._tryParse(value);
-        this.runRefinements(value as T);
+
+    public parse(value: unknown): T {
+        const result = this._parse(value);
+
+        this.runRefinements(result);
+
         return result;
     }
-};
+
+    public tryParse(value: unknown): SafeParseResult<T> {
+        const result = this._tryParse(value);
+
+        if (!result.success) {
+            return result;
+        }
+
+        const refinementResult = this.tryRunRefinements(result.data);
+
+        if (refinementResult) {
+            return refinementResult;
+        }
+
+        return result;
+    }
+}
