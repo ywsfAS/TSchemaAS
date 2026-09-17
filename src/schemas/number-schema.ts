@@ -3,14 +3,14 @@ import type {SafeParseResult} from "../types";
 
 export class NumberSchema extends Schema<number> {
 
-    public parse(value : unknown) : number {
+    public _parse(value : unknown) : number {
         if(typeof value !== "number"){
             throw new Error("Expected a number");
         }
         return value;
     }
 
-    public tryParse(value: unknown): SafeParseResult<number> {
+    public _tryParse(value: unknown): SafeParseResult<number> {
 
         if(typeof value !== "number"){
             return {

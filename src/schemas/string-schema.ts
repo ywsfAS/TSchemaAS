@@ -3,14 +3,14 @@ import type {SafeParseResult} from "../types";
 
 export class StringSchema extends Schema<string> {
 
-    public parse(value: unknown): string {
+    public _parse(value: unknown): string {
         if(typeof value !== "string"){
             throw new Error("Expected a string");
         }
         return value;
     }
 
-    public tryParse(value : unknown) : SafeParseResult<string>{
+    public _tryParse(value : unknown) : SafeParseResult<string>{
         if(typeof value !== "string"){
             return {
                 success : false ,

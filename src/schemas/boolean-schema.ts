@@ -3,7 +3,7 @@ import type {SafeParseResult}  from "../types";
 
 export class BooleanSchema extends Schema<boolean>{
 
-    public parse(value : unknown) : boolean {
+    public _parse(value : unknown) : boolean {
 
         if(typeof value !== "boolean"){
             throw new Error("Expected a boolean");
@@ -12,7 +12,7 @@ export class BooleanSchema extends Schema<boolean>{
         return value;
     }
 
-    public tryParse(value : unknown) : SafeParseResult<boolean>{
+    public _tryParse(value : unknown) : SafeParseResult<boolean>{
         
         if(typeof value !== "boolean"){
 

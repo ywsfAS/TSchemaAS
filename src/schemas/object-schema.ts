@@ -15,7 +15,7 @@ export class ObjectSchema<S extends SchemaObjectShape> extends Schema<InferObjec
         return true;
     }
 
-    parse(obj: unknown): InferObjectSchemaType<S> {
+    public _parse(obj: unknown): InferObjectSchemaType<S> {
         if(!this.checkObj(obj)){
             throw new Error("The type is incompatible with Object");
         }
@@ -34,7 +34,7 @@ export class ObjectSchema<S extends SchemaObjectShape> extends Schema<InferObjec
         return record as InferObjectSchemaType<S>;
     }
 
-    tryParse(obj: unknown): SafeParseResult<InferObjectSchemaType<S>> {
+    public _tryParse(obj: unknown): SafeParseResult<InferObjectSchemaType<S>> {
         if(!this.checkObj(obj)){
             return {
                 success : false,
