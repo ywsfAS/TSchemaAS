@@ -8,6 +8,8 @@ import type { Schema } from "./schemas/schema.js";
 import { Optional } from "./modifiers/optional.js";
 import { Nullable } from "./modifiers/nullable.js";
 import { Default } from "./modifiers/default.js";
+import { MinRefinement } from "./refinements/Min.js";
+import { MaxRefinement } from "./refinements/Max.js";
 
 
 export const s = {

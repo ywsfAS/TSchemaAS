@@ -12,3 +12,4 @@ export type inferType<T> =
         : T extends Schema<any> 
             ? InferSchemaType<T>
             : never;
+export type Predicate<T> = (value : T) => boolean;
