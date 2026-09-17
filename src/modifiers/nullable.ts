@@ -35,6 +35,6 @@ declare module "../schemas/schema.js" {
     nullable(): Nullable<this>;
   }
 }
-Schema.prototype.nullable = function (this : Schema<any>){
+Schema.prototype.nullable = function (){
     return new Nullable(this);
 };

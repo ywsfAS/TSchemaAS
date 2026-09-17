@@ -7,6 +7,7 @@ import type { SchemaObjectShape , inferType} from "./types.js";
 import type { Schema } from "./schemas/schema.js";
 import { Optional } from "./modifiers/optional.js";
 import { Nullable } from "./modifiers/nullable.js";
+import { Default } from "./modifiers/default.js";
 
 
 export const s = {

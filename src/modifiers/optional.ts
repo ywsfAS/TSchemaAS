@@ -34,6 +34,6 @@ declare module "../schemas/schema.js" {
     optional(): Optional<this>;
   }
 }
-Schema.prototype.optional = function (this : Schema<any>){
+Schema.prototype.optional = function (){
     return new Optional(this);
 };
