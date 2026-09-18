@@ -13,6 +13,7 @@ export type inferType<T> =
         : T extends Schema<any> 
             ? InferSchemaType<T>
             : never;
+
 export type Predicate<T> = (value : T) => boolean;
 export type Path = (string | number)[];
 export type Issue = {
@@ -20,5 +21,8 @@ export type Issue = {
     message : string;
     code : string;
 
+}
+export type Picked<T,K extends Partial<Record<keyof T,boolean>>> = {
+   [P in keyof K as K[P] extends true ? P : never ] : P extends keyof T ? T[P] : never;
 }
 export type InternalResult<T> = { success : true, data : T} | { success : false };
