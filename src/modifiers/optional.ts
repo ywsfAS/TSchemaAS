@@ -1,5 +1,6 @@
+import type { ErrorSchema } from "../errors/error-schema.js";
 import { Schema } from "../schemas/schema.js";
-import type {  inferType, SafeParseResult } from "../types";
+import type {  inferType, InternalResult, Path, SafeParseResult } from "../types";
 
 export class Optional<T extends Schema<any>> extends Schema<inferType<T> | undefined>{
     private _object : T;
@@ -7,21 +8,10 @@ export class Optional<T extends Schema<any>> extends Schema<inferType<T> | undef
         super();
         this._object = s; 
     }
-
-    public parse(value: unknown): inferType<T> | undefined {
-        if(value === undefined) return value;
-        return this._object.parse(value);
-    }
-
-    public tryParse(value: unknown): SafeParseResult<inferType<T> | undefined> {
-        if(value === undefined){
-            return {
-                success : true,
-                data : value
-            }
-        };
-        return this._object.tryParse(value);
-        
+    public _tryParse(value: unknown , errors : ErrorSchema , path : Path): InternalResult<inferType<T> | undefined> {
+        if(value === undefined) return {success : true , data : value};
+        this.runRefinements(value as inferType<T> , errors , path);
+        return this._object._tryParse(value,errors,path);
     }
 
 

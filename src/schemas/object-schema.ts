@@ -1,4 +1,5 @@
-import type { SafeParseResult, SchemaObjectShape  , InferObjectSchemaType} from "../types";
+import type { ErrorSchema } from "../errors/error-schema";
+import type {  SchemaObjectShape  , InferObjectSchemaType, Path, InternalResult} from "../types";
 import {Schema} from "./schema.js";
 
 export class ObjectSchema<S extends SchemaObjectShape> extends Schema<InferObjectSchemaType<S>> {
@@ -14,54 +15,37 @@ export class ObjectSchema<S extends SchemaObjectShape> extends Schema<InferObjec
         }
         return true;
     }
-
-    public _parse(obj: unknown): InferObjectSchemaType<S> {
+    public _tryParse(obj: unknown , errors : ErrorSchema , path : Path): InternalResult<InferObjectSchemaType<S>>{
         if(!this.checkObj(obj)){
-            throw new Error("The type is incompatible with Object");
+            errors.addIssue({
+                path : path,
+                message : "The type is incompatible with Object",
+                code : ""
+            });
+            return { success : false };
         }
         const record = obj as Record<string,any>;
+        let success = true;
         for(const [k ,s] of Object.entries(this._object)){
             if(!Object.hasOwn(record,k)){
-                throw new Error("The type is incompatible");
+                errors.addIssue({
+                    path : path,
+                    message : `The property ${k} doesnt exist in the schema`,
+                    code : "",
+                })
             }
-            try {
-               s.parse(record[k]);
-            }catch(err){
-                throw new Error(`failed to parse property ${k} in object ${record}`)
-            }
-        }
-
-        return record as InferObjectSchemaType<S>;
-    }
-
-    public _tryParse(obj: unknown): SafeParseResult<InferObjectSchemaType<S>> {
-        if(!this.checkObj(obj)){
-            return {
-                success : false,
-                error : new Error(`The type is incompatible with Object`)
-            }
-        }
-        const record = obj as Record<string,any>;
-        for(const [k ,s] of Object.entries(this._object)){
-            if(!Object.hasOwn(record,k)){
-                return {
-                    success : false,
-                    error : new Error("The object type is incompatible with the schema")
-                }
-            }
-            const result = s.tryParse(record[k]);
+            const result = s._tryParse(record[k],errors,[...path,k]);
             if(!result.success){
-                return {
-                    success : false,
-                    error : new Error(`failed to parse property ${k} in object ${record}`)
-                }
+                success = false;
             }
         }
+        if(!success) return {success : false};
+        this.runRefinements(record as InferObjectSchemaType<S>,errors,path);
 
         return {
             success : true,
             data : record as InferObjectSchemaType<S>
-        };
+        }
         
     }
 

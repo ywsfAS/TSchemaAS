@@ -1,5 +1,6 @@
+import type { ErrorSchema } from "../errors/error-schema";
 import { Schema } from "../schemas/schema";
-import type { inferType, SafeParseResult } from "../types";
+import type { inferType, InternalResult, Path} from "../types";
 
 export class Nullable<T extends Schema<any>> extends Schema<inferType<T> | null> {
 
@@ -8,25 +9,11 @@ export class Nullable<T extends Schema<any>> extends Schema<inferType<T> | null>
         super();
         this._object = s;
     }
-
-    public parse(value: unknown): inferType<T> | null {
-        if(value === null) return value;
-        return this._object.parse(value);
+    public _tryParse(value: unknown , errors : ErrorSchema,path : Path): InternalResult<inferType<T> | null> {
+        if(value === null) return {success : true , data : value};
+        this.runRefinements(value as inferType<T> , errors , path);
+        return this._object._tryParse(value,errors,path);
     }
-
-    public tryParse(value: unknown): SafeParseResult<inferType<T> | null> {
-        
-        if(value === null){
-            return {
-                success : true,
-                data : value,
-            }
-        }
-        return this._object.tryParse(value);
-    }
-
-
-
 
 }
 //@ts-ignore

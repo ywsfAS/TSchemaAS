@@ -1,5 +1,6 @@
+import type { ErrorSchema } from "../errors/error-schema";
 import { Schema } from "../schemas/schema";
-import type { inferType, SafeParseResult } from "../types";
+import type { InferSchemaType, inferType, InternalResult, Path} from "../types";
 
 export class Default<T extends Schema<any>> extends Schema<inferType<T>>{
 
@@ -12,20 +13,11 @@ export class Default<T extends Schema<any>> extends Schema<inferType<T>>{
         this._d = d;
     }
 
-    public parse(value: unknown): inferType<T> {
-        
-        return this._object.parse(value === undefined ? this._d : value);
+    public _tryParse(value: unknown, errors : ErrorSchema,path : Path): InternalResult<inferType<T>> {
+       const modifiedValue = value === undefined ? this._d : value;
+       this.runRefinements(modifiedValue as inferType<T>,errors,path);
+       return this._object._tryParse(modifiedValue,errors ,path); 
     }
-
-    public tryParse(value: unknown): SafeParseResult<inferType<T>> {
-       return this._object.tryParse(value === undefined ? this._d : value); 
-    }
-
-
-
-
-
-
 
 
 }
