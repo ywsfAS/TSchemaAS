@@ -43,7 +43,7 @@ export class ObjectSchema<S extends SchemaObjectShape> extends Schema<InferObjec
     }
     public pick<K extends Partial<Record<keyof S , boolean>>>(obj : K) : ObjectSchema<Picked<S,K>>  {
 
-        const pickedObj : Record<string ,any>= {};
+        const pickedObj : SchemaObjectShape = {};
         for(const [p,v] of Object.entries(this._object)){
             if(Object.hasOwn(obj,p)){
                 pickedObj[p] = v;
@@ -54,7 +54,7 @@ export class ObjectSchema<S extends SchemaObjectShape> extends Schema<InferObjec
     }
     public omit<K extends Partial<Record<keyof S, boolean>>>(obj : K) : ObjectSchema<Omited<S,K>>{
 
-        const omitedObj : Record<string ,any>= {};
+        const omitedObj : SchemaObjectShape = {};
         for(const [p,v] of Object.entries(this._object)){
             if(!Object.hasOwn(obj,p)){
                 omitedObj[p] = v;
@@ -64,12 +64,16 @@ export class ObjectSchema<S extends SchemaObjectShape> extends Schema<InferObjec
     }
     public partial<K extends Partial<S>>() : ObjectSchema<PartialSchema<S>>{
 
-        const partialObj : Record<string ,any>= {};
+        const partialObj : SchemaObjectShape = {};
         for(const [p,v] of Object.entries(this._object)){
                 partialObj[p] = v.optional();
         }
         return new ObjectSchema(partialObj as PartialSchema<S>);
     
+    }
+    public extend<E extends SchemaObjectShape>(obj : E) : ObjectSchema<E & S>{
+        const extendedObj : SchemaObjectShape = {...this._object,...obj};
+        return new ObjectSchema(extendedObj as E & S);
     }
 
 
