@@ -1,4 +1,5 @@
 import type { ErrorSchema } from "./errors/error-schema";
+import type { Optional } from "./modifiers/optional";
 import type { Schema } from "./schemas/schema";
 
 export type SafeParseResult<T> = {success : true , data : T} | {success : false , error : ErrorSchema};
@@ -27,5 +28,8 @@ export type Picked<T,K extends Partial<Record<keyof T,boolean>>> = {
 }
 export type Omited<T,K extends Partial<Record<keyof T,boolean>>> = {
    [P in keyof K as K[P] extends true ? never : P ] : P extends keyof T ? T[P] : never;
+}
+export type PartialSchema<T extends SchemaObjectShape> = {
+    [k in keyof T] : Optional<T[k]>;
 }
 export type InternalResult<T> = { success : true, data : T} | { success : false };

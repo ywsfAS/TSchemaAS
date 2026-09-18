@@ -1,5 +1,5 @@
 import type { ErrorSchema } from "../errors/error-schema";
-import type {  SchemaObjectShape  , InferObjectSchemaType, Path, InternalResult, Picked, Omited} from "../types";
+import type {  SchemaObjectShape  , InferObjectSchemaType, Path, InternalResult, Picked, Omited, PartialSchema} from "../types";
 import {Schema} from "./schema.js";
 
 export class ObjectSchema<S extends SchemaObjectShape> extends Schema<InferObjectSchemaType<S>> {
@@ -27,13 +27,6 @@ export class ObjectSchema<S extends SchemaObjectShape> extends Schema<InferObjec
         const record = obj as Record<string,any>;
         let success = true;
         for(const [k ,s] of Object.entries(this._object)){
-            if(!Object.hasOwn(record,k)){
-                errors.addIssue({
-                    path : path,
-                    message : `The property ${k} doesnt exist in the schema`,
-                    code : "",
-                })
-            }
             const result = s._tryParse(record[k],errors,[...path,k]);
             if(!result.success){
                 success = false;
@@ -68,6 +61,15 @@ export class ObjectSchema<S extends SchemaObjectShape> extends Schema<InferObjec
             }
         }
         return new ObjectSchema(omitedObj as Omited<S,K>);
+    }
+    public partial<K extends Partial<S>>() : ObjectSchema<PartialSchema<S>>{
+
+        const partialObj : Record<string ,any>= {};
+        for(const [p,v] of Object.entries(this._object)){
+                partialObj[p] = v.optional();
+        }
+        return new ObjectSchema(partialObj as PartialSchema<S>);
+    
     }
 
 
