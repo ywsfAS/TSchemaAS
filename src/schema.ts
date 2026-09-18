@@ -15,6 +15,7 @@ import { Email } from "./refinements/email.js";
 import {Url} from "./refinements/url.js";
 import { Negative , Positive } from "./refinements/positive-negative.js";
 import { Refine } from "./refinements/refine.js";
+import { Lazy } from "./schemas/lazy-schema.js";
 
 
 export const s = {
@@ -33,6 +34,9 @@ export const s = {
     array<T extends Schema<any>>(s : T){
         return new ArraySchema(s);
     },
+    lazy<T>(fn : () => Schema<T>){
+        return new Lazy(fn);
+    }
 }
 export namespace s {
     export type infer<T> = inferType<T>;
