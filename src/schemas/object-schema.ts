@@ -1,5 +1,5 @@
 import type { ErrorSchema } from "../errors/error-schema";
-import type {  SchemaObjectShape  , InferObjectSchemaType, Path, InternalResult, Picked} from "../types";
+import type {  SchemaObjectShape  , InferObjectSchemaType, Path, InternalResult, Picked, Omited} from "../types";
 import {Schema} from "./schema.js";
 
 export class ObjectSchema<S extends SchemaObjectShape> extends Schema<InferObjectSchemaType<S>> {
@@ -58,6 +58,16 @@ export class ObjectSchema<S extends SchemaObjectShape> extends Schema<InferObjec
         }
         return new ObjectSchema(pickedObj as Picked<S,K>);
         
+    }
+    public omit<K extends Partial<Record<keyof S, boolean>>>(obj : K) : ObjectSchema<Omited<S,K>>{
+
+        const omitedObj : Record<string ,any>= {};
+        for(const [p,v] of Object.entries(this._object)){
+            if(!Object.hasOwn(obj,p)){
+                omitedObj[p] = v;
+            }
+        }
+        return new ObjectSchema(omitedObj as Omited<S,K>);
     }
 
 

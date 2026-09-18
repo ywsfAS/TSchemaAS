@@ -25,4 +25,7 @@ export type Issue = {
 export type Picked<T,K extends Partial<Record<keyof T,boolean>>> = {
    [P in keyof K as K[P] extends true ? P : never ] : P extends keyof T ? T[P] : never;
 }
+export type Omited<T,K extends Partial<Record<keyof T,boolean>>> = {
+   [P in keyof K as K[P] extends true ? never : P ] : P extends keyof T ? T[P] : never;
+}
 export type InternalResult<T> = { success : true, data : T} | { success : false };
