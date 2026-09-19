@@ -17,6 +17,7 @@ import { Negative , Positive } from "./refinements/positive-negative.js";
 import { Refine } from "./refinements/refine.js";
 import { StringStartsWith , ArrayStartsWith } from "./refinements/startswith.js";
 import { StringEndsWith , ArrayEndsWith} from "./refinements/endsWith.js";
+import { StringIncludes , ArrayIncludes } from "./refinements/includes.js";
 import { Lazy } from "./schemas/lazy-schema.js";
 
 
