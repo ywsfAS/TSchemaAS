@@ -100,4 +100,17 @@ describe("Number min and max", () => {
         expect(() => schema.parse(9)).toThrow();
         expect(() => schema.parse(101)).toThrow();
     });
+    it("supports min and max together for arrays", () => {
+
+        const schema = s.array(s.number())
+        .min(10)
+        .max(20);
+
+        const validArr = new Array(15).fill(67);
+        const invalidArr = new Array(5).fill(10);
+
+        expect(schema.parse(validArr)).toEqual(validArr);
+        expect(() => schema.parse(invalidArr)).throws();
+
+    })
 });
