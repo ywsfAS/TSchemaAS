@@ -1,6 +1,6 @@
-import type { Predicate } from "../types";
-import { Refinement } from "./refinement";
-import { Schema } from "../schemas/schema";
+import type { Predicate } from "../types.js";
+import { Refinement } from "./refinement.js";
+import { Schema } from "../schemas/schema.js";
 
 export class Refine<T> extends Refinement<T>{
 

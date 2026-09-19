@@ -1,5 +1,5 @@
-import { StringSchema } from "../schemas/string-schema";
-import { Refinement } from "./refinement";
+import { StringSchema } from "../schemas/string-schema.js";
+import { Refinement } from "./refinement.js";
 
 
 export class Regex extends Refinement<string> {

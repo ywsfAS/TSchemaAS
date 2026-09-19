@@ -1,6 +1,6 @@
-import type { ErrorSchema } from "../errors/error-schema";
-import type { InternalResult, Literal, Path } from "../types";
-import { Schema } from "./schema";
+import type { ErrorSchema } from "../errors/error-schema.js";
+import type { InternalResult, Literal, Path } from "../types.js";
+import { Schema } from "./schema.js";
 
 export class EnumSchema<T extends (string | number | boolean)[]> extends Schema<Literal<T[number]>>{
 

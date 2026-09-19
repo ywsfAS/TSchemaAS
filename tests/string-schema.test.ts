@@ -1,5 +1,5 @@
 import {it,describe,expect} from "vitest";
-import {s} from "../src/schema.js";
+import {s} from "../src/index.js";
 
 describe("string-schema",() => {
 

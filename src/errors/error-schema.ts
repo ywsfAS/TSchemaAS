@@ -1,4 +1,4 @@
-import type { Issue } from "../types"
+import type { Issue } from "../types.js"
 
 export class ErrorSchema extends Error {
 

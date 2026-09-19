@@ -1,11 +1,47 @@
 {
-  "name": "TSchemaAS",
+  "name": "tschemaas",
   "version": "1.0.0",
+  "description": "A lightweight, type-safe schema validation library for TypeScript with runtime validation and static type inference.",
   "type": "module",
-  "dependencies": {
-    "typescript": "^7.0.2"
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
   },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "keywords": [
+    "typescript",
+    "schema",
+    "validation",
+    "type-inference",
+    "runtime-validation",
+    "parser"
+  ],
+  "author": "Youssef AS",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ywsfAS/TSchemaAS.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ywsfAS/TSchemaAS/issues"
+  },
+  "homepage": "https://github.com/ywsfAS/TSchemaAS#readme",
   "devDependencies": {
-    "vitest": "^5.0.1"
+    "typescript": "^5.9.3",
+    "vitest": "^2.1.9"
+  },
+  "directories": {
+    "example": "examples"
   }
 }

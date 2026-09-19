@@ -1,6 +1,6 @@
-import type { ErrorSchema } from "../errors/error-schema";
-import { Schema } from "../schemas/schema";
-import type { inferType, InternalResult, Path} from "../types";
+import type { ErrorSchema } from "../errors/error-schema.js";
+import { Schema } from "../schemas/schema.js";
+import type { inferType, InternalResult, Path} from "../types.js";
 
 export class Nullable<T extends Schema<any>> extends Schema<inferType<T> | null> {
 

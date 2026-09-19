@@ -1,6 +1,6 @@
-import type { ErrorSchema } from "../errors/error-schema";
-import type { Path, InternalResult } from "../types";
-import { Schema } from "./schema";
+import type { ErrorSchema } from "../errors/error-schema.js";
+import type { Path, InternalResult } from "../types.js";
+import { Schema } from "./schema.js";
 
 export class Lazy<T> extends Schema<T> {
     private _schemafn : () => Schema<T>;

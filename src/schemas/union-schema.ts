@@ -1,5 +1,5 @@
 import { ErrorSchema } from "../errors/error-schema.js";
-import type { Element, InferSchemaType, InternalResult, Path } from "../types.js";
+import type { InferSchemaType, InternalResult, Path } from "../types.js";
 import { Schema } from "./schema.js";
 
 export class UnionSchema<T extends Schema<any>[]> extends Schema<InferSchemaType<T[number]>> {

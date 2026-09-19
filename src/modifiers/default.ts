@@ -1,5 +1,5 @@
-import type { ErrorSchema } from "../errors/error-schema";
-import { Schema } from "../schemas/schema";
+import type { ErrorSchema } from "../errors/error-schema.js";
+import { Schema } from "../schemas/schema.js";
 import type { InferSchemaType, inferType, InternalResult, Path} from "../types";
 
 export class Default<T extends Schema<any>> extends Schema<inferType<T>>{

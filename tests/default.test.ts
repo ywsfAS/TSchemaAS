@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { s } from "../src/schema.js";
+import { s } from "../src/index.js";
 
 describe("DefaultSchema", () => {
     it("returns the default value when input is undefined", () => {

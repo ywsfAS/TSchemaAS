@@ -1,7 +1,7 @@
-import { Refinement } from "./refinement";
-import { NumberSchema } from "../schemas/number-schema";
-import { StringSchema } from "../schemas/string-schema";
-import { ArraySchema } from "../schemas/array-schema";
+import { Refinement } from "./refinement.js";
+import { NumberSchema } from "../schemas/number-schema.js";
+import { ArraySchema } from "../schemas/array-schema.js";
+import { StringSchema } from "../schemas/string-schema.js";
 
 
 export abstract class MinRefinement<T,C> extends Refinement<T> {

@@ -1,6 +1,5 @@
-
 import { describe, expect, test } from "vitest";
-import { s } from "../src/schema.js";
+import { s } from "../src/index.js";
 
 describe("ObjectSchema.partial", () => {
     const User = s.object({

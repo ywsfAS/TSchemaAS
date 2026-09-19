@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { s } from "../src/schema.js";
+import { s } from "../src/index.js";
 
 describe("ObjectSchema.omit", () => {
     const User = s.object({

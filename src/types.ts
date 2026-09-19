@@ -1,6 +1,6 @@
-import type { ErrorSchema } from "./errors/error-schema";
-import type { Optional } from "./modifiers/optional";
-import type { Schema } from "./schemas/schema";
+import type { ErrorSchema } from "./errors/error-schema.js";
+import type { Optional } from "./modifiers/optional.js";
+import type { Schema } from "./schemas/schema.js";
 
 export type SafeParseResult<T> = {success : true , data : T} | {success : false , error : ErrorSchema};
 export type SchemaObjectShape = Record<string,Schema<any>>;

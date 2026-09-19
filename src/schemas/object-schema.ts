@@ -1,5 +1,5 @@
-import type { ErrorSchema } from "../errors/error-schema";
-import type {  SchemaObjectShape  , InferObjectSchemaType, Path, InternalResult, Picked, Omited, PartialSchema} from "../types";
+import type { ErrorSchema } from "../errors/error-schema.js";
+import type {  SchemaObjectShape  , InferObjectSchemaType, Path, InternalResult, Picked, Omited, PartialSchema} from "../types.js";
 import {Schema} from "./schema.js";
 
 export class ObjectSchema<S extends SchemaObjectShape> extends Schema<InferObjectSchemaType<S>> {

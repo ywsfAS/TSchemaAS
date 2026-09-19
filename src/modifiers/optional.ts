@@ -1,6 +1,6 @@
 import type { ErrorSchema } from "../errors/error-schema.js";
 import { Schema } from "../schemas/schema.js";
-import type {  inferType, InternalResult, Path, SafeParseResult } from "../types";
+import type {  inferType, InternalResult, Path} from "../types.js";
 
 export class Optional<T extends Schema<any>> extends Schema<inferType<T> | undefined>{
     private _object : T;

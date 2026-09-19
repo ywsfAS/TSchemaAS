@@ -1,7 +1,7 @@
-import type { Element } from "../types";
-import { Refinement } from "./refinement";
-import { ArraySchema } from "../schemas/array-schema";
-import { StringSchema } from "../schemas/string-schema";
+import type { Element } from "../types.js";
+import { Refinement } from "./refinement.js";
+import { ArraySchema } from "../schemas/array-schema.js";
+import { StringSchema } from "../schemas/string-schema.js";
 
 
 export class StringIncludes extends Refinement<string> {

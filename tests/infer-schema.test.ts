@@ -1,6 +1,5 @@
-
 import {describe, it , expect} from "vitest";
-import {s} from "../src/schema.js";
+import {s} from "../src/index.js";
 
 // Inference is checked by TypeScript at compile time, so the runtime assertion is always true.
 describe("s.infer", () => {

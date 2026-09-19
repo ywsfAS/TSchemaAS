@@ -1,6 +1,6 @@
-import { ErrorSchema } from "../errors/error-schema";
-import type { Refinement } from "../refinements/refinement";
-import type { SafeParseResult , Path, InternalResult} from "../types";
+import { ErrorSchema } from "../errors/error-schema.js";
+import type { Refinement } from "../refinements/refinement.js";
+import type { SafeParseResult , Path, InternalResult} from "../types.js";
 
 export abstract class Schema<T> {
     protected readonly _refinements: Refinement<T>[] = [];

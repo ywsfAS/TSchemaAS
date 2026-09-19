@@ -1,5 +1,5 @@
-import type { ErrorSchema } from "../errors/error-schema";
-import type { InferSchemaType ,inferType,InternalResult,Path} from "../types";
+import type { ErrorSchema } from "../errors/error-schema.js";
+import type { InferSchemaType ,InternalResult,Path} from "../types.js";
 import { Schema } from "./schema.js";
 
 export class ArraySchema<T extends Schema<any>> extends Schema<InferSchemaType<T>[]> {
