@@ -15,6 +15,7 @@ import { Email } from "./refinements/email.js";
 import {Url} from "./refinements/url.js";
 import { Negative , Positive } from "./refinements/positive-negative.js";
 import { Refine } from "./refinements/refine.js";
+import { StringStartsWith , ArrayStartsWith } from "./refinements/startswith.js";
 import { Lazy } from "./schemas/lazy-schema.js";
 
 
