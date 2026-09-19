@@ -22,6 +22,7 @@ import { NumberNaN , NumberFinite } from "./refinements/nan-finit.js";
 import { Lazy } from "./schemas/lazy-schema.js";
 import { LiteralSchema } from "./schemas/literal-schema.js";
 import type { LiteralType } from "typescript/unstable/sync";
+import { EnumSchema } from "./schemas/enums-schema.js";
 
 
 export const s = {
@@ -45,7 +46,11 @@ export const s = {
     },
     literal<T extends string | boolean | number>(l : T & Literal<T>){
         return new LiteralSchema(l);
+    },
+    enum<T extends (string | boolean | number)[]>(e : T & Literal<T[number]>[]){
+        return new EnumSchema(e);
     }
+
 }
 export namespace s {
     export type infer<T> = inferType<T>;
