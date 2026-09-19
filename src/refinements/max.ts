@@ -1,8 +1,8 @@
 
-import { Refinement } from "./refinement";
-import { NumberSchema } from "../schemas/number-schema";
-import { StringSchema } from "../schemas/string-schema";
-
+import { Refinement } from "./refinement.js";
+import { NumberSchema } from "../schemas/number-schema.js";
+import { StringSchema } from "../schemas/string-schema.js";
+import { ArraySchema } from "../schemas/array-schema.js";
 
 export abstract class MaxRefinement<T,C> extends Refinement<T> {
 
@@ -35,6 +35,17 @@ export class MaxString extends MaxRefinement<string,number> {
         return value.length <= this.max_value; 
     }
 }
+export class MaxArray extends MaxRefinement<any[],number> {
+
+    protected max_value ;
+    constructor(max : number){
+        super(`array length cannot be longer than ${max} character`);
+        this.max_value = max;
+    }
+    protected CompareTo(arr: any[]): boolean {
+        return arr.length <= this.max_value; 
+    }
+}
 //@ts-ignore
 declare module "../schemas/number-schema.js" {
   interface NumberSchema {
@@ -45,6 +56,15 @@ declare module "../schemas/string-schema.js" {
   interface StringSchema{
     max(n : number): this;
   }
+}
+declare module "../schemas/array-schema.js" {
+  interface ArraySchema<T>{
+    max(n : number): this;
+  }
+}
+ArraySchema.prototype.max = function (m : number){
+    this._refinements.push(new MaxArray(m));
+    return this;
 }
 NumberSchema.prototype.max = function (m : number){
     this._refinements.push(new MaxNumber(m))

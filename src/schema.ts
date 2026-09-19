@@ -3,7 +3,7 @@ import {NumberSchema} from "./schemas/number-schema.js";
 import {BooleanSchema} from "./schemas/boolean-schema.js";
 import {ObjectSchema} from "./schemas/object-schema.js";
 import { ArraySchema } from "./schemas/array-schema.js";
-import type { SchemaObjectShape , inferType} from "./types.js";
+import type {  Literal, SchemaObjectShape , inferType} from "./types.js";
 import type { Schema } from "./schemas/schema.js";
 import { Optional } from "./modifiers/optional.js";
 import { Nullable } from "./modifiers/nullable.js";
@@ -15,7 +15,15 @@ import { Email } from "./refinements/email.js";
 import {Url} from "./refinements/url.js";
 import { Negative , Positive } from "./refinements/positive-negative.js";
 import { Refine } from "./refinements/refine.js";
-
+import { StringStartsWith , ArrayStartsWith } from "./refinements/startswith.js";
+import { StringEndsWith , ArrayEndsWith} from "./refinements/endsWith.js";
+import { StringIncludes , ArrayIncludes } from "./refinements/includes.js";
+import { NumberNaN , NumberFinite } from "./refinements/nan-finit.js";
+import { Lazy } from "./schemas/lazy-schema.js";
+import { LiteralSchema } from "./schemas/literal-schema.js";
+import type { LiteralType } from "typescript/unstable/sync";
+import { EnumSchema } from "./schemas/enums-schema.js";
+import { UnionSchema } from "./schemas/union-schema.js";
 
 export const s = {
     string(){
@@ -33,6 +41,21 @@ export const s = {
     array<T extends Schema<any>>(s : T){
         return new ArraySchema(s);
     },
+    lazy<T>(fn : () => Schema<T>){
+        return new Lazy(fn);
+    },
+    literal<T extends string | boolean | number>(l : T & Literal<T>){
+        return new LiteralSchema(l);
+    },
+    enum<T extends (string | boolean | number)[]>(e : T & Literal<T[number]>[]){
+        return new EnumSchema(e);
+    },
+    union<T extends Schema<any>[]>(u : T){
+        return new UnionSchema(u);
+    },
+
+
+
 }
 export namespace s {
     export type infer<T> = inferType<T>;

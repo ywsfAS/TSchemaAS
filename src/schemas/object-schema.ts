@@ -1,4 +1,5 @@
-import type { SafeParseResult, SchemaObjectShape  , InferObjectSchemaType} from "../types";
+import type { ErrorSchema } from "../errors/error-schema.js";
+import type {  SchemaObjectShape  , InferObjectSchemaType, Path, InternalResult, Picked, Omited, PartialSchema} from "../types.js";
 import {Schema} from "./schema.js";
 
 export class ObjectSchema<S extends SchemaObjectShape> extends Schema<InferObjectSchemaType<S>> {
@@ -14,55 +15,68 @@ export class ObjectSchema<S extends SchemaObjectShape> extends Schema<InferObjec
         }
         return true;
     }
-
-    public _parse(obj: unknown): InferObjectSchemaType<S> {
-        if(!this.checkObj(obj)){
-            throw new Error("The type is incompatible with Object");
-        }
-        const record = obj as Record<string,any>;
-        for(const [k ,s] of Object.entries(this._object)){
-            if(!Object.hasOwn(record,k)){
-                throw new Error("The type is incompatible");
-            }
-            try {
-               s.parse(record[k]);
-            }catch(err){
-                throw new Error(`failed to parse property ${k} in object ${record}`)
-            }
-        }
-
-        return record as InferObjectSchemaType<S>;
+    public get shape(){
+        return this._object;
     }
-
-    public _tryParse(obj: unknown): SafeParseResult<InferObjectSchemaType<S>> {
+    public _tryParse(obj: unknown , errors : ErrorSchema , path : Path): InternalResult<InferObjectSchemaType<S>>{
         if(!this.checkObj(obj)){
-            return {
-                success : false,
-                error : new Error(`The type is incompatible with Object`)
-            }
+            errors.addIssue({
+                path : path,
+                message : "The type is incompatible with Object",
+                code : ""
+            });
+            return { success : false };
         }
         const record = obj as Record<string,any>;
+        let success = true;
         for(const [k ,s] of Object.entries(this._object)){
-            if(!Object.hasOwn(record,k)){
-                return {
-                    success : false,
-                    error : new Error("The object type is incompatible with the schema")
-                }
-            }
-            const result = s.tryParse(record[k]);
+            const result = s._tryParse(record[k],errors,[...path,k]);
             if(!result.success){
-                return {
-                    success : false,
-                    error : new Error(`failed to parse property ${k} in object ${record}`)
-                }
+                success = false;
             }
         }
+        if(!success) return {success : false};
+        this.runRefinements(record as InferObjectSchemaType<S>,errors,path);
 
         return {
             success : true,
             data : record as InferObjectSchemaType<S>
-        };
+        }
         
+    }
+    public pick<K extends Partial<Record<keyof S , boolean>>>(obj : K) : ObjectSchema<Picked<S,K>>  {
+
+        const pickedObj : SchemaObjectShape = {};
+        for(const [p,v] of Object.entries(this._object)){
+            if(Object.hasOwn(obj,p)){
+                pickedObj[p] = v;
+            }
+        }
+        return new ObjectSchema(pickedObj as Picked<S,K>);
+        
+    }
+    public omit<K extends Partial<Record<keyof S, boolean>>>(obj : K) : ObjectSchema<Omited<S,K>>{
+
+        const omitedObj : SchemaObjectShape = {};
+        for(const [p,v] of Object.entries(this._object)){
+            if(!Object.hasOwn(obj,p)){
+                omitedObj[p] = v;
+            }
+        }
+        return new ObjectSchema(omitedObj as Omited<S,K>);
+    }
+    public partial<K extends Partial<S>>() : ObjectSchema<PartialSchema<S>>{
+
+        const partialObj : SchemaObjectShape = {};
+        for(const [p,v] of Object.entries(this._object)){
+                partialObj[p] = v.optional();
+        }
+        return new ObjectSchema(partialObj as PartialSchema<S>);
+    
+    }
+    public extend<E extends SchemaObjectShape>(obj : E) : ObjectSchema<E & S>{
+        const extendedObj : SchemaObjectShape = {...this._object,...obj};
+        return new ObjectSchema(extendedObj as E & S);
     }
 
 

@@ -1,6 +1,8 @@
-import type { Schema } from "./schemas/schema";
+import type { ErrorSchema } from "./errors/error-schema.js";
+import type { Optional } from "./modifiers/optional.js";
+import type { Schema } from "./schemas/schema.js";
 
-export type SafeParseResult<T> = {success : true , data : T} | {success : false , error : Error};
+export type SafeParseResult<T> = {success : true , data : T} | {success : false , error : ErrorSchema};
 export type SchemaObjectShape = Record<string,Schema<any>>;
 export type InferSchemaType<T extends Schema<any>> = T extends Schema<infer S> ? S : never;
 export type InferObjectSchemaType<S extends SchemaObjectShape> = {
@@ -12,4 +14,38 @@ export type inferType<T> =
         : T extends Schema<any> 
             ? InferSchemaType<T>
             : never;
+
 export type Predicate<T> = (value : T) => boolean;
+export type Path = (string | number)[];
+export type Issue = {
+    path : Path ;
+    message : string;
+    code : string;
+
+}
+export type Element<T> = T extends readonly (infer U)[]  ? U : never;
+export type Picked<T,K extends Partial<Record<keyof T,boolean>>> = {
+   [P in keyof K as K[P] extends true ? P : never ] : P extends keyof T ? T[P] : never;
+}
+export type Omited<T,K extends Partial<Record<keyof T,boolean>>> = {
+   [P in keyof K as K[P] extends true ? never : P ] : P extends keyof T ? T[P] : never;
+}
+export type PartialSchema<T extends SchemaObjectShape> = {
+    [k in keyof T] : Optional<T[k]>;
+}
+export type InternalResult<T> = { success : true, data : T} | { success : false };
+export type Literal<T> =
+    T extends string
+        ? string extends T
+            ? never
+            : T
+        : T extends number
+            ? number extends T
+                ? never
+                : T
+            : T extends boolean
+                ? boolean extends T
+                    ? never
+                    : T
+                : never;
+

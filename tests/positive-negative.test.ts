@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { s } from "../src/schema.js";
+import { s } from "../src/index.js";
 
 describe("Number positive refinement", () => {
     it("accepts a positive number", () => {

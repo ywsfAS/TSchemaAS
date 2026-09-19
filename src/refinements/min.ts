@@ -1,6 +1,7 @@
-import { Refinement } from "./refinement";
-import { NumberSchema } from "../schemas/number-schema";
-import { StringSchema } from "../schemas/string-schema";
+import { Refinement } from "./refinement.js";
+import { NumberSchema } from "../schemas/number-schema.js";
+import { ArraySchema } from "../schemas/array-schema.js";
+import { StringSchema } from "../schemas/string-schema.js";
 
 
 export abstract class MinRefinement<T,C> extends Refinement<T> {
@@ -34,6 +35,16 @@ export class MinString extends MinRefinement<string,number> {
         return value.length >= this.min_value; 
     }
 }
+export class MinArray extends MinRefinement<any[],number>{
+    protected min_value: number;
+    constructor(min : number){
+        super(`array length cannot be shorter than ${min} character`);
+        this.min_value = min;
+    }
+    protected CompareTo(arr: any[]): boolean {
+        return arr.length >= this.min_value; 
+    }
+}
 
 
 //@ts-ignore
@@ -46,6 +57,15 @@ declare module "../schemas/string-schema.js" {
   interface StringSchema{
     min(n : number): this;
   }
+}
+declare module "../schemas/array-schema.js" {
+  interface ArraySchema<T> {
+    min(n : number): this;
+  }
+}
+ArraySchema.prototype.min = function (m : number) {
+    this._refinements.push(new MinArray(m));
+    return this;
 }
 NumberSchema.prototype.min = function (m : number){
     this._refinements.push(new MinNumber(m))

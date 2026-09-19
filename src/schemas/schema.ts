@@ -1,53 +1,46 @@
-import type { Refinement } from "../refinements/refinement";
-import type { SafeParseResult } from "../types";
+import { ErrorSchema } from "../errors/error-schema.js";
+import type { Refinement } from "../refinements/refinement.js";
+import type { SafeParseResult , Path, InternalResult} from "../types.js";
 
 export abstract class Schema<T> {
     protected readonly _refinements: Refinement<T>[] = [];
 
-    abstract _parse(value: unknown): T;
+    abstract _tryParse(value: unknown, errors : ErrorSchema , path : Path): InternalResult<T>;
 
-    abstract _tryParse(value: unknown): SafeParseResult<T>;
-
-    protected runRefinements(value: T): void {
+    protected runRefinements(value: T, errors : ErrorSchema ,path : Path): void {
         for (const ref of this._refinements) {
             if (!ref.check(value)) {
-                throw new Error(ref.message);
+                errors.addIssue({
+                    path,
+                    message : ref.message,
+                    code : "",
+                });
             }
         }
     }
-
-    protected tryRunRefinements(value: T): SafeParseResult<T> | void {
-        for (const ref of this._refinements) {
-            if (!ref.check(value)) {
-                return {
-                    success: false,
-                    error: new Error(ref.message)
-                };
-            }
-        }
-    }
-
     public parse(value: unknown): T {
-        const result = this._parse(value);
-
-        this.runRefinements(result);
-
-        return result;
+        const path : Path = [];
+        const errors : ErrorSchema = new ErrorSchema();
+        const result = this._tryParse(value,errors,path);
+        if(!errors.isEmpty() || !result.success){
+            throw errors;
+        }
+        return result.data;
     }
 
     public tryParse(value: unknown): SafeParseResult<T> {
-        const result = this._tryParse(value);
-
-        if (!result.success) {
-            return result;
+        const path : Path = [];
+        const errors : ErrorSchema = new ErrorSchema();
+        const result = this._tryParse(value,errors,path);
+        if(!errors.isEmpty() || !result.success){
+            return {
+                success : false,
+                error : errors
+            }
         }
-
-        const refinementResult = this.tryRunRefinements(result.data);
-
-        if (refinementResult) {
-            return refinementResult;
+        return {
+            success : true,
+            data : result.data as T
         }
-
-        return result;
     }
 }

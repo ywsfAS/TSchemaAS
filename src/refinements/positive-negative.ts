@@ -1,5 +1,5 @@
-import { Refinement } from "./refinement";
-import { NumberSchema } from "../schemas/number-schema";
+import { Refinement } from "./refinement.js";
+import { NumberSchema } from "../schemas/number-schema.js";
 
 export class Positive extends Refinement<number> {
 

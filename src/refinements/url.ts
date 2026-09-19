@@ -1,5 +1,5 @@
-import { Refinement } from "./refinement";
-import { StringSchema } from "../schemas/string-schema";
+import { Refinement } from "./refinement.js";
+import { StringSchema } from "../schemas/string-schema.js";
 
 export class Url extends Refinement<string> {
 

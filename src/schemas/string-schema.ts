@@ -1,23 +1,20 @@
 import {Schema} from "./schema.js";
-import type {SafeParseResult} from "../types";
+import type { ErrorSchema } from "../errors/error-schema.js";
+import type { InternalResult, Path } from "../types.js";
 
 export class StringSchema extends Schema<string> {
 
-    public _parse(value: unknown): string {
+    public _tryParse(value : unknown , errors : ErrorSchema , path : Path) : InternalResult<string> {
         if(typeof value !== "string"){
-            throw new Error("Expected a string");
-        }
-        return value;
-    }
+            errors.addIssue({
+                path : path,
+                message : "Expected a string",
+                code : "",
+            });
+            return { success : false};
 
-    public _tryParse(value : unknown) : SafeParseResult<string>{
-        if(typeof value !== "string"){
-            return {
-                success : false ,
-                error : new Error("Expected a string")
-            };
         }
-
+        this.runRefinements(value,errors,path);
         return {
             success : true,
             data : value

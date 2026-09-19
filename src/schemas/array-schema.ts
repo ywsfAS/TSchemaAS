@@ -1,4 +1,5 @@
-import type { InferSchemaType, SafeParseResult } from "../types";
+import type { ErrorSchema } from "../errors/error-schema.js";
+import type { InferSchemaType ,InternalResult,Path} from "../types.js";
 import { Schema } from "./schema.js";
 
 export class ArraySchema<T extends Schema<any>> extends Schema<InferSchemaType<T>[]> {
@@ -14,47 +15,31 @@ export class ArraySchema<T extends Schema<any>> extends Schema<InferSchemaType<T
         }
         return true;
     }
-    public _parse(arr : unknown): InferSchemaType<T>[] {
+    public _tryParse(arr : unknown , errors : ErrorSchema , path : Path): InternalResult<InferSchemaType<T>[]> {
         if(!this.checkArray(arr)){
-            throw new Error("The type is incompatible with any[]");
+            errors.addIssue({
+                path : path,
+                message : "The type is incompatible with any[]",
+                code : ""
+            });
+            return { success : false};
         }
        const list = arr as any[];
-       for(let el of list){
-            try{
-                this._schema.parse(el);
-            }
-            catch(err){
-                throw new Error(`failed to parse element ${el}`,{
-                    cause : err
-                });
-            }
-       }
-       return list as InferSchemaType<T>[]; 
-    }
-    public _tryParse(arr : unknown): SafeParseResult<InferSchemaType<T>[]> {
-        if(!this.checkArray(arr)){
-            return {
-                success : false,
-                error : new Error("The type is incompatible with any[]")
-            }
-        }
-       const list = arr as any[];
-       for(let el of list){
-            const result = this._schema.tryParse(el);
+       let success = true;
+       for(let i = 0 ; i < list.length ; i++){
+            const curr = list[i];
+            const result = this._schema._tryParse(curr,errors,[...path,i]);
             if(!result.success){
-                return {
-                    success : false,
-                    error :  new Error(`failed to parse element ${el}`)
-                }
+                success = false;
             }
         }
-       return {
-           success : true,
-           data : list as InferSchemaType<T>[]
-       }; 
+
+        if(!success) return {success : false};
+        this.runRefinements(arr,errors,path);
+        return {
+            success : true,
+            data : list
+        }
         
     }
-
-
-
 }
