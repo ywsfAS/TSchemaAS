@@ -3,7 +3,7 @@ import {NumberSchema} from "./schemas/number-schema.js";
 import {BooleanSchema} from "./schemas/boolean-schema.js";
 import {ObjectSchema} from "./schemas/object-schema.js";
 import { ArraySchema } from "./schemas/array-schema.js";
-import type { Literal, SchemaObjectShape , inferType} from "./types.js";
+import type {  Literal, SchemaObjectShape , inferType} from "./types.js";
 import type { Schema } from "./schemas/schema.js";
 import { Optional } from "./modifiers/optional.js";
 import { Nullable } from "./modifiers/nullable.js";
@@ -52,7 +52,8 @@ export const s = {
     },
     union<T extends Schema<any>[]>(u : T){
         return new UnionSchema(u);
-    }
+    },
+
 
 
 }

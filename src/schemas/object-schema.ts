@@ -15,6 +15,9 @@ export class ObjectSchema<S extends SchemaObjectShape> extends Schema<InferObjec
         }
         return true;
     }
+    public get shape(){
+        return this._object;
+    }
     public _tryParse(obj: unknown , errors : ErrorSchema , path : Path): InternalResult<InferObjectSchemaType<S>>{
         if(!this.checkObj(obj)){
             errors.addIssue({
