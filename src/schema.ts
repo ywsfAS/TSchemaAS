@@ -18,6 +18,7 @@ import { Refine } from "./refinements/refine.js";
 import { StringStartsWith , ArrayStartsWith } from "./refinements/startswith.js";
 import { StringEndsWith , ArrayEndsWith} from "./refinements/endsWith.js";
 import { StringIncludes , ArrayIncludes } from "./refinements/includes.js";
+import { NumberNaN , NumberFinite } from "./refinements/nan-finit.js";
 import { Lazy } from "./schemas/lazy-schema.js";
 
 
