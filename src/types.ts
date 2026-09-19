@@ -34,3 +34,17 @@ export type PartialSchema<T extends SchemaObjectShape> = {
     [k in keyof T] : Optional<T[k]>;
 }
 export type InternalResult<T> = { success : true, data : T} | { success : false };
+export type Literal<T> =
+    T extends string
+        ? string extends T
+            ? never
+            : T
+        : T extends number
+            ? number extends T
+                ? never
+                : T
+            : T extends boolean
+                ? boolean extends T
+                    ? never
+                    : T
+                : never;
