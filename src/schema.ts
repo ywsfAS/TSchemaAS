@@ -23,7 +23,7 @@ import { Lazy } from "./schemas/lazy-schema.js";
 import { LiteralSchema } from "./schemas/literal-schema.js";
 import type { LiteralType } from "typescript/unstable/sync";
 import { EnumSchema } from "./schemas/enums-schema.js";
-
+import { UnionSchema } from "./schemas/union-schema.js";
 
 export const s = {
     string(){
@@ -49,7 +49,11 @@ export const s = {
     },
     enum<T extends (string | boolean | number)[]>(e : T & Literal<T[number]>[]){
         return new EnumSchema(e);
+    },
+    union<T extends Schema<any>[]>(u : T){
+        return new UnionSchema(u);
     }
+
 
 }
 export namespace s {

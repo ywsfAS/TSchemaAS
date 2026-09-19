@@ -23,7 +23,7 @@ export type Issue = {
     code : string;
 
 }
-export type Element<T> = T extends (infer U)[]  ? U : never;
+export type Element<T> = T extends readonly (infer U)[]  ? U : never;
 export type Picked<T,K extends Partial<Record<keyof T,boolean>>> = {
    [P in keyof K as K[P] extends true ? P : never ] : P extends keyof T ? T[P] : never;
 }
