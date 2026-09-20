@@ -2,8 +2,19 @@ import type { ErrorSchema } from "../errors/error-schema.js";
 import { Schema } from "../schemas/schema.js";
 import type {  inferType, InternalResult, Path} from "../types.js";
 
+/**
+ * Schema wrapper that allows `undefined` as a valid value.
+ *
+ * When the input is `undefined`, validation succeeds without validating
+ * the underlying schema. Otherwise, the value is validated normally.
+ */
 export class Optional<T extends Schema<any>> extends Schema<inferType<T> | undefined>{
     private _object : T;
+    /**
+    * Creates an optional schema around another schema.
+    *
+    * @param s The underlying schema used to validate defined values.
+    */
     constructor(s : T){
         super();
         this._object = s; 
@@ -20,7 +31,16 @@ export class Optional<T extends Schema<any>> extends Schema<inferType<T> | undef
 // Add optional() to Schema.prototype at runtime to avoid a circular dependency at runtime.
 // decalare module for typescripte type system at compile time
 declare module "../schemas/schema.js" {
+
   interface Schema<T> {
+    /**
+    * Allows `undefined` as a valid value for the schema.
+    *
+    * When the input is `undefined`, validation succeeds without
+    * validating the underlying schema.
+    *
+    * @returns A schema that accepts the original value or `undefined`.
+    */
     optional(): Optional<this>;
   }
 }

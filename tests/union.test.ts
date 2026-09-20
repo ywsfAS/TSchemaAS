@@ -34,7 +34,7 @@ describe("union schema", () => {
         if (!result.success) {
             expect(result.error.issues).toHaveLength(1);
             expect(result.error.issues[0].message)
-                .toBe("Expected a value in the union");
+                .toBe("Expected a union");
         }
     });
 

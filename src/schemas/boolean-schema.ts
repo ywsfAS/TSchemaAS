@@ -2,6 +2,11 @@ import type { ErrorSchema } from "../errors/error-schema.js";
 import type { InternalResult, Path } from "../types.js";
 import  {Schema} from "./schema.js";
 
+/**
+ * Schema that validates boolean values.
+ *
+ * Accepts only the primitive `true` and `false` values.
+ */
 export class BooleanSchema extends Schema<boolean>{
 
     public _tryParse(value : unknown , errors : ErrorSchema,path : Path) : InternalResult<boolean> {
@@ -9,7 +14,7 @@ export class BooleanSchema extends Schema<boolean>{
             errors.addIssue({
                 path : path,
                 message : "Expected a boolean",
-                code : ""
+                code : "invalid_type"
             });
             return { success : false }
         }

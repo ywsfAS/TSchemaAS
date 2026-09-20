@@ -4,14 +4,27 @@ import { ArraySchema } from "../schemas/array-schema.js";
 import { StringSchema } from "../schemas/string-schema.js";
 
 
-
+/**
+ * Refinement that requires a string to start with a specified prefix.
+ */
 export class StringStartsWith extends Refinement<string>{
     private readonly _prefix : string;
 
+    /**
+    * Creates a string-prefix refinement.
+    *
+    * @param p Prefix that the string must start with.
+    */
     constructor(p : string){
         super(`String must starts with ${p}`);
         this._prefix = p;
     }
+    /**
+    * Checks whether the string starts with the configured prefix.
+    *
+    * @param value The string to validate.
+    * @returns `true` if the string starts with the prefix; otherwise, `false`.
+    */
     public check(value: string): boolean {
        return this.isPrefix(value); 
     }
@@ -21,14 +34,33 @@ export class StringStartsWith extends Refinement<string>{
     }
 
 }
+/**
+ * Refinement that requires an array to start with a specified element
+ * or sequence of elements.
+ *
+ * @typeParam T The array type being validated.
+ * @typeParam C The type of prefix accepted by the refinement.
+ */
 export class ArrayStartsWith<T extends any[],C extends (T | Element<T>)> extends Refinement<T> {
 
     private readonly _prefix : C;
+    /**
+    * Creates an array-prefix refinement.
+    *
+    * @param p Element or sequence of elements that the array must start with.
+    */
     constructor(p : C){
         super(`Sequence must starts with ${p}`);
         this._prefix = p;
     }
 
+    /**
+    * Checks whether the array starts with the configured element or sequence.
+    *
+    * @param value The array to validate.
+    * @returns `true` if the array starts with the configured prefix;
+    * otherwise, `false`.
+    */
     public check(value: T): boolean {
         return this.isPrefix(value);    
     }
@@ -55,11 +87,23 @@ export class ArrayStartsWith<T extends any[],C extends (T | Element<T>)> extends
 // @ts-ignore
 declare module "../schemas/array-schema.js" {
   interface ArraySchema<T>{
+    /**
+    * Requires the array to start with the specified value or sequence.
+    *
+    * @param m Element or sequence that must appear at the beginning of the array.
+    * @returns The current schema with prefix validation.
+    */
     startsWith(m : any): this;
   }
 }
 declare module "../schemas/string-schema.js" {
   interface StringSchema{
+    /**
+    * Requires the string to start with the specified prefix.
+    *
+    * @param m Prefix that must appear at the beginning of the string.
+    * @returns The current schema with prefix validation.
+    */
     startsWith(m : string): this;
   }
 }

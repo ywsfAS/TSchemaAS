@@ -165,12 +165,12 @@ describe("Schema errors", () => {
                 {
                     path: ["name"],
                     message: "Name is too short",
-                    code: ""
+                    code: "custom"
                 },
                 {
                     path: ["age"],
                     message: "Must be an adult",
-                    code: ""
+                    code: "custom"
                 }
             ]);
         }
@@ -306,22 +306,22 @@ describe("Schema errors", () => {
                 {
                     path: ["username"],
                     message: "Username is too short",
-                    code: ""
+                    code: "custom"
                 },
                 {
                     path: ["profile", "age"],
                     message: "Must be an adult",
-                    code: ""
+                    code: "custom"
                 },
                 {
                     path: ["scores", 1],
                     message: "Score cannot be negative",
-                    code: ""
+                    code: "custom"
                 },
                 {
                     path: ["scores", 3],
                     message: "Score cannot be negative",
-                    code: ""
+                    code: "custom"
                 }
             ]);
         }

@@ -3,15 +3,27 @@ import { Refinement } from "./refinement.js";
 import { ArraySchema } from "../schemas/array-schema.js";
 import { StringSchema } from "../schemas/string-schema.js";
 
-
+/**
+ * Refinement that requires a string to end with a specified suffix.
+ */
 export class StringEndsWith extends Refinement<string> {
     private readonly _suffix: string;
 
+    /**
+    * Creates a string suffix refinement.
+    *
+    * @param s The suffix that the string must end with.
+    */
     constructor(s: string) {
         super(`String must end with ${s}`);
         this._suffix = s;
     }
-
+    /**
+    * Checks whether the string ends with the required suffix.
+    *
+    * @param value The string to validate.
+    * @returns `true` if the string ends with the suffix; otherwise, `false`.
+    */
     public check(value: string): boolean {
         return this.isSuffix(value);
     }
@@ -21,7 +33,10 @@ export class StringEndsWith extends Refinement<string> {
     }
 }
 
-
+/**
+ * Refinement that requires an array to end with a specified element
+ * or sequence of elements.
+ */
 export class ArrayEndsWith<
     T extends any[],
     C extends T | Element<T>
@@ -29,11 +44,23 @@ export class ArrayEndsWith<
 
     private readonly _suffix: C;
 
+    /**
+    * Creates an array suffix refinement.
+    *
+    * @param s The element or sequence that the array must end with.
+    */
     constructor(s: C) {
         super(`Sequence must end with ${s}`);
         this._suffix = s;
     }
 
+    /**
+    * Checks whether the array ends with the required element or sequence.
+    *
+    * @param value The array to validate.
+    * @returns `true` if the array ends with the specified suffix;
+    * otherwise, `false`.
+    */
     public check(value: T): boolean {
         return this.isSuffix(value);
     }
@@ -71,12 +98,24 @@ export class ArrayEndsWith<
 // @ts-ignore
 declare module "../schemas/array-schema.js" {
     interface ArraySchema<T> {
+        /**
+        * Requires the array to end with the specified value or sequence.
+        *
+        * @param m Element or sequence that must appear at the end of the array.
+        * @returns The current schema with suffix validation.
+        */
         endsWith(m: any): this;
     }
 }
 
 declare module "../schemas/string-schema.js" {
     interface StringSchema {
+        /**
+        * Requires the string to end with the specified suffix.
+        *
+        * @param m Suffix that must appear at the end of the string.
+        * @returns The current schema with suffix validation.
+        */
         endsWith(m: string): this;
     }
 }
