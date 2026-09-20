@@ -53,21 +53,41 @@ export class ObjectSchema<S extends SchemaObjectShape> extends Schema<InferObjec
 
         return { success: false };
         }
-        const record = obj as Record<string,any>;
+        const record = obj as Record<string, unknown>;
+        const parsed: Record<string, unknown> = {};
         let success = true;
-        for(const [k ,s] of Object.entries(this._object)){
-            const result = s._tryParse(record[k],errors,[...path,k]);
-            if(!result.success){
+
+        for (const [k, s] of Object.entries(this._object)) {
+            const result = s._tryParse(
+                record[k],
+                errors,
+                [...path, k]
+            );
+
+            if (!result.success) {
                 success = false;
+                continue;
+            }
+
+            if (Object.hasOwn(record, k) || result.data !== undefined) {
+                parsed[k] = result.data;
             }
         }
-        if(!success) return {success : false};
-        this.runRefinements(record as InferObjectSchemaType<S>,errors,path);
+
+        if (!success) {
+            return { success: false };
+        }
+
+        this.runRefinements(
+            parsed as InferObjectSchemaType<S>,
+            errors,
+            path
+        );
 
         return {
-            success : true,
-            data : record as InferObjectSchemaType<S>
-        }
+            success: true,
+            data: parsed as InferObjectSchemaType<S>
+        };
         
     }
     /**

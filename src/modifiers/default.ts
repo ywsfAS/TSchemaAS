@@ -1,6 +1,6 @@
 import type { ErrorSchema } from "../errors/error-schema.js";
 import { Schema } from "../schemas/schema.js";
-import type {inferType, InternalResult, Path} from "../types";
+import type {inferType, InternalResult, Path} from "../types.js";
 
  /**
   * Schema wrapper that provides a default value when the input is `undefined`.

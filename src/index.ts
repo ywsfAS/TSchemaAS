@@ -1,4 +1,19 @@
 // Package entry point.
+import "./modifiers/optional.js";
+import "./modifiers/nullable.js";
+import "./modifiers/default.js";
+
+import "./refinements/min.js";
+import "./refinements/max.js";
+import "./refinements/regex.js";
+import "./refinements/email.js";
+import "./refinements/url.js";
+import "./refinements/positive-negative.js";
+import "./refinements/refine.js";
+import "./refinements/startswith.js";
+import "./refinements/endsWith.js";
+import "./refinements/includes.js";
+import "./refinements/nan-finit.js";
 import {StringSchema} from "./schemas/string-schema.js";
 import {NumberSchema} from "./schemas/number-schema.js";
 import {BooleanSchema} from "./schemas/boolean-schema.js";
@@ -6,23 +21,8 @@ import {ObjectSchema} from "./schemas/object-schema.js";
 import { ArraySchema } from "./schemas/array-schema.js";
 import type {  Literal, SchemaObjectShape , inferType} from "./types.js";
 import type { Schema } from "./schemas/schema.js";
-import { Optional } from "./modifiers/optional.js";
-import { Nullable } from "./modifiers/nullable.js";
-import { Default } from "./modifiers/default.js";
-import { MinRefinement , MinArray , MinString , MinNumber } from "./refinements/min.js";
-import { MaxRefinement , MaxArray , MaxNumber , MaxString} from "./refinements/max.js";
-import { Regex } from "./refinements/regex.js";
-import { Email } from "./refinements/email.js";
-import {Url} from "./refinements/url.js";
-import { Negative , Positive } from "./refinements/positive-negative.js";
-import { Refine } from "./refinements/refine.js";
-import { StringStartsWith , ArrayStartsWith } from "./refinements/startswith.js";
-import { StringEndsWith , ArrayEndsWith} from "./refinements/endsWith.js";
-import { StringIncludes , ArrayIncludes } from "./refinements/includes.js";
-import { NumberNaN , NumberFinite } from "./refinements/nan-finit.js";
 import { Lazy } from "./schemas/lazy-schema.js";
 import { LiteralSchema } from "./schemas/literal-schema.js";
-import { ErrorSchema } from "./errors/error-schema.js";
 import { EnumSchema } from "./schemas/enums-schema.js";
 import { UnionSchema } from "./schemas/union-schema.js";
 
@@ -98,7 +98,7 @@ export const s = {
      * @param e Array of allowed string, number, or boolean values.
      * @returns An enum schema.
      */
-    enum<T extends (string | boolean | number)[]>(e : T & Literal<T[number]>[]){
+    enum<T extends (string | boolean | number)[]>(e : T ){
         return new EnumSchema(e);
     },
     /**
