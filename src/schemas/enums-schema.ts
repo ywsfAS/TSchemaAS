@@ -7,7 +7,7 @@ import { Schema } from "./schema.js";
  *
  * @typeParam T The tuple containing the allowed enum values.
  */
-export class EnumSchema<T extends (string | number | boolean)[]> extends Schema<Literal<T[number]>>{
+export class EnumSchema<const T extends readonly (string | number | boolean)[]> extends Schema<Literal<T[number]>>{
 
     private readonly _enums : T;
 

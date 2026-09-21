@@ -1,7 +1,8 @@
-import type { Element } from "../types.js";
+import type { Element, InferSchemaType } from "../types.js";
 import { Refinement } from "./refinement.js";
 import { ArraySchema } from "../schemas/array-schema.js";
 import { StringSchema } from "../schemas/string-schema.js";
+import type { Schema } from "../schemas/schema.js";
 
 /**
  * Refinement that requires a string to contain a specified substring.
@@ -109,7 +110,7 @@ declare module "../schemas/array-schema.js" {
         * @param m Value that must be present in the array.
         * @returns The current schema with inclusion validation.
         */
-        includes(m: any): this;
+        includes(m: InferSchemaType<T> | InferSchemaType<T>[]): this;
     }
 }
 
@@ -126,7 +127,7 @@ declare module "../schemas/string-schema.js" {
 }
 
 
-ArraySchema.prototype.includes = function (m: any) {
+ArraySchema.prototype.includes = function<T extends Schema<any>>(m: InferSchemaType<T> | InferSchemaType<T>[]) {
     this._refinements.push(new ArrayIncludes(m));
     return this;
 };

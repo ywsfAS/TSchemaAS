@@ -1,4 +1,4 @@
-import type { Element} from "../types.js";
+import type { Element, InferSchemaType} from "../types.js";
 import { Refinement } from "./refinement.js";
 import { ArraySchema } from "../schemas/array-schema.js";
 import { StringSchema } from "../schemas/string-schema.js";
@@ -93,7 +93,7 @@ declare module "../schemas/array-schema.js" {
     * @param m Element or sequence that must appear at the beginning of the array.
     * @returns The current schema with prefix validation.
     */
-    startsWith(m : any): this;
+    startsWith(m : InferSchemaType<T> | InferSchemaType<T>[]): this;
   }
 }
 declare module "../schemas/string-schema.js" {

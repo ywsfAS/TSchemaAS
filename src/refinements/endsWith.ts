@@ -1,7 +1,8 @@
-import type { Element } from "../types.js";
+import type { Element, InferSchemaType } from "../types.js";
 import { Refinement } from "./refinement.js";
 import { ArraySchema } from "../schemas/array-schema.js";
 import { StringSchema } from "../schemas/string-schema.js";
+import { Schema } from "../schemas/schema.js";
 
 /**
  * Refinement that requires a string to end with a specified suffix.
@@ -104,7 +105,7 @@ declare module "../schemas/array-schema.js" {
         * @param m Element or sequence that must appear at the end of the array.
         * @returns The current schema with suffix validation.
         */
-        endsWith(m: any): this;
+        endsWith(m: InferSchemaType<T> | InferSchemaType<T>[]): this;
     }
 }
 
@@ -121,7 +122,7 @@ declare module "../schemas/string-schema.js" {
 }
 
 
-ArraySchema.prototype.endsWith = function (m: any) {
+ArraySchema.prototype.endsWith = function<T extends Schema<any>> (m: InferSchemaType<T> | InferSchemaType<T>[]) {
     this._refinements.push(new ArrayEndsWith(m));
     return this;
 };

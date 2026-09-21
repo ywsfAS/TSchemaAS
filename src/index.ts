@@ -59,7 +59,7 @@ export const s = {
     * @param obj Object containing the schemas for each property.
     * @returns An object schema.
     */
-    object(obj : SchemaObjectShape){
+    object<T extends SchemaObjectShape>(obj : T){
         return new ObjectSchema(obj);
     },
       /**
@@ -98,7 +98,7 @@ export const s = {
      * @param e Array of allowed string, number, or boolean values.
      * @returns An enum schema.
      */
-    enum<T extends (string | boolean | number)[]>(e : T ){
+    enum<const T extends readonly (string | boolean | number)[]>(e : T ){
         return new EnumSchema(e);
     },
     /**
